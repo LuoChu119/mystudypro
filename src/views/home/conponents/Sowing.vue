@@ -11,11 +11,6 @@
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>    -->
         <div  id="swiper" class="swiper-container">
-          <div class="swiper-wrapper">
-              <div class="swiper-slide">Slide 1</div>
-              <div class="swiper-slide">Slide 2</div>
-              <div class="swiper-slide">Slide 3</div>
-          </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
           <div class="swiper-scrollbar"></div>
