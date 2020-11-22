@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">  
+<script src="https://unpkg.com/swiper/swiper-bundle.js"> </script>  
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+        </div>
+        <div class="swiper-pagination"></div><!--分页器。如果放置在swiper-container外面，需要自定义样式。-->
+    </div>
+</body>
+<script>
+    console.log(Swiper)
+    var mySwiper = new Swiper('.swiper-container',{
+pagination: {
+    el: '.swiper-pagination',
+  },
+})
+</script>
+<style>
+     .swiper-container{
+    --swiper-theme-color: #ff6600;
+    --swiper-pagination-color: #00ff33;/* 两种都可以 */
+  }
+</style>
+</html>
