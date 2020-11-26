@@ -13,7 +13,7 @@
                     <img :src="props.active ? icon.active : icon.inactive" />
                 </template>
             </van-tabbar-item>
-             <van-tabbar-item replace to="/dashboard/cart">
+             <van-tabbar-item replace to="/dashboard/cart" :badge="goodsNum > 0 ? goodsNum : ''">
                 <span>购物车</span>
                 <template #icon="props">
                     <img :src="props.active ? icon2.active : icon2.inactive" />
@@ -26,15 +26,18 @@
                 </template>
             </van-tabbar-item>
         </van-tabbar>
-        <router-view/>
+        <keep-alive>
+            <router-view/>
+        </keep-alive>
     </div>
 </template>
 <script>
+import {mapState, mapMutations} from 'vuex'
 export default {
     name:'Dashboard',
     data() {
     return {
-      active: 0,
+      active: Number(sessionStorage.getItem('tabBarActiveIndex')) | 0,
       icon: {
         active: 'https://img.yzcdn.cn/vant/user-active.png',
         inactive: 'https://img.yzcdn.cn/vant/user-inactive.png',
@@ -49,7 +52,41 @@ export default {
       }
       
     };
-  },
+    },
+    //监视器见识active的值的变动
+    watch:{
+        active(value){
+            console.log(value);
+            let tabBarActiveIndex = value > 1 ? value : 0;
+            //缓存到本地
+            sessionStorage.setItem('tabBarActiveIndex', value   )
+        }
+    },
+    //从vuex中拿到的所有的数据，状态都应该放到computed里面
+    computed:{
+        ...mapState(['shopCart']),
+        goodsNum(){
+            if(this.shopCart){
+                //总的购物车商品数量
+                let num = 0
+                //取出对象中的所有的值
+                Object.values(this.shopCart).forEach((goods) => {
+                    num += goods.num
+                })
+                return num
+            }else{
+                return 0
+            }
+        }
+    },
+    mounted(){
+        //到这个钩子里面代表页面初始化完毕
+        //1.获取购物车里面的数据
+        this.INIT_SHOP_CART();
+    },
+    methods:{
+        ...mapMutations(['INIT_SHOP_CART'])
+    }
 }
 </script>
 <style lang="less" scoped>

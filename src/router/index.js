@@ -21,8 +21,8 @@ export default new Router({
       children: [
         //路由重定义
         {path:'/dashboard',redirect:'/dashboard/home'},
-        {path:'home', name:'home', component: Home},
-        {path:'category', name:'category', component: Category},
+        {path:'home', name:'home', component: Home, meta: {keepAlive: true}},
+        {path:'category', name:'category', component: Category, meta: {keepAlive: true}},
         {path:'cart', name:'cart', component: Cart},
         {path:'mine', name:'mine', component: Mine},
 

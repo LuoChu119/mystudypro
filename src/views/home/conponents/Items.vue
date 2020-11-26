@@ -10,19 +10,25 @@
             <div class="no_price">
                 <span>￥{{slect.origin_price}}</span>
             </div>
-            <div class="line"></div>
             <div class="price">
                 ￥{{slect.price}}
             </div>
-            <div class="shop"><van-icon name="cart-o" /></div>
+            <div @click="addToCart(slect)" class="shop" ><van-icon name="cart-o" /></div>
         </div>
     </div>
 </template>
 <script>
+//引入消息订阅模块
+import PubSub from 'pubsub-js'
 export default {
     name:'Items',
     props:{
         items_list: Array
+    },
+    methods:{
+        addToCart(goods){
+            PubSub.publish('homeAddToCart', goods)
+        }
     }
 }
 </script>
