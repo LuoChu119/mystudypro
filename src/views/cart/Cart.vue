@@ -10,7 +10,7 @@
             <main class="contentWrapperList">
                 <section class=" main_part" v-for="(goods) in shopCart" :key="goods.id">
                     <div class="select">
-                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-if="selectShow" name="circle" class="no_select"/>
+                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-if="!goods.checked" name="circle" class="no_select"/>
                         <van-icon @click="singerGoodsSelected(goods, goods.id)" v-else name="passed" class="y_select"/>
                     </div>
                     <div class="proImg">
@@ -32,9 +32,9 @@
             <div class="tabBar">
                 <div class="tabBarLeft">
                     <a href="javascript:" class="cartCheckBox"></a>
-                    <div class="select">
-                        <van-icon v-if="selectShow" name="circle" class="no_select"/>
-                        <van-icon  v-else name="passed" class="y_select"/>
+                    <div class="select" @click="selectAll">
+                        <van-icon v-if="isSelectAll" name="passed" class="y_select"/>
+                        <van-icon v-else name="circle" class="no_select"/>
                     </div>
                     <span>全选</span>
                     <div class="selectAll">
@@ -67,12 +67,15 @@ export default {
     data(){
         return{
             radio: '1',
-            selectShow: false
-
+            isSelectAll: false
         }
     },
     methods:{
-        ...mapMutations(['REDCE_CART', 'ADD_GOODS', 'SELECTED_SIGLE_GOODS', 'CLEAR_CART']),
+        ...mapMutations(['REDCE_CART', 'ADD_GOODS', 'SELECTED_SIGLE_GOODS', 'SELECTED_All_GOODS', 'CLEAR_CART']),
+        selectAll() {
+            this.isSelectAll = !this.isSelectAll
+            this.SELECTED_All_GOODS(this.isSelectAll)
+        },
         //1.移出购物车
         async removeOutCart(goodsId, goodsNum){
             if(goodsNum > 1){

@@ -6,6 +6,8 @@ export const INIT_SHOP_CART = 'INIT_SHOP_CART';
 export const REDCE_CART = 'REDCE_CART';
 //单个商品选中或者取消选中
 export const SELECTED_SIGLE_GOODS = 'SELECTED_SIGLE_GOODS';
+// 选中全部商品
+export const SELECTED_All_GOODS = 'SELECTED_All_GOODS'
 //清空购物车
 export const CLEAR_CART = 'CLEAR_CART';
 //保存用户信息

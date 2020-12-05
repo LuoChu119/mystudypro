@@ -86,6 +86,7 @@ export default {
         //获取当前用户的地址
         async initUserAddress(){
             if(this.userInfo.token){//处于登录状态
+            console.log('进入了')
                 let result = await getUserAddress(this.userInfo.token)
                 console.log('aaaaaaaa');
                 console.log(result);

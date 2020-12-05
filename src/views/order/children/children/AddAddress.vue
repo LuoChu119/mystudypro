@@ -34,6 +34,9 @@ export default {
     computed:{
         ...mapState(['userInfo'])
     },
+    mounted() {
+        console.log(this.userInfo)
+    },
     methods:{
         onClickLeft(){
             this.$router.back()
@@ -59,6 +62,8 @@ export default {
                         duration: 400
                     })
                 }
+            } else {
+                alert('没有token')
             }
         },
         onChangeDetail(val) {

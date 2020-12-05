@@ -1,9 +1,11 @@
 import {ADD_GOODS, INIT_SHOP_CART, REDCE_CART,
+    SELECTED_All_GOODS,
      SELECTED_SIGLE_GOODS, USER_INFO, INIT_USER_INFO
      ,RESET_USER_INFO, CLEAR_CART
     } from './mutations-type.js'
 import {setStore, getStore, removeStore} from './../config/global'
 import Vue from 'vue'
+import { Object } from 'core-js'
 export default {
     
     //1.往购物车里添加数据
@@ -54,7 +56,6 @@ export default {
             state.shopCart = {...shopCart}
             //存入本地
             setStore('shopCart', state.shopCart)
-
         }
     },
     //4.单个商品选中或者取消选中
@@ -62,16 +63,38 @@ export default {
         let shopCart = state.shopCart
         let goods = shopCart[goodsId]
         if(goods){
-            if(goods.checked){
-                goods.checked = !goods.checked
-            }else{
-                Vue.set(goods, 'checked', true)
-            }
+            Object.values(shopCart).forEach(el => {
+                if (el.id === goodsId) {
+                    el.checked = !el.checked
+                }
+            })
+            // if(goods.checked){
+            //     goods.checked = !goods.checked
+            // }else{
+            //     Vue.set(goods, 'checked', true)
+            // }
             //同步数据
             state.shopCart = {...shopCart}
             //存入本地
             setStore('shopCart', state.shopCart)
         }
+    },
+    // 全选和非全选
+    [SELECTED_All_GOODS](state, isSelectAll) {
+        let shopCart = state.shopCart
+        console.log(isSelectAll)
+        if (isSelectAll) {
+            Object.values(shopCart).forEach(el => {
+                el.checked = true
+            })
+        } else {
+            Object.values(shopCart).forEach(el => {
+                el.checked = false
+            })
+        }
+        state.shopCart = {...shopCart}
+            //存入本地
+        setStore('shopCart', state.shopCart)
     },
     //5.保存用户信息到本地
     [USER_INFO](state, {userInfo}){
