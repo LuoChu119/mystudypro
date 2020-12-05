@@ -61,23 +61,8 @@ export default {
 
     },
     mounted(){
-        //消息订阅（添加到购物车的消息）
-        PubSub.subscribe('categoryAddToCart', (msg, goods) => {
-            if(msg === 'categoryAddToCart'){
-                this.ADD_GOODS({
-                    goodsId: goods.id,
-                    goodsName: goods.name,
-                    smallImage: goods.small_image,
-                    goodsPrice: goods.price
-                })
-                //轻提示用户添加购物车成功
-                Toast('添加购物车成功');
-            }
-            
-        })
     },  
     methods:{
-        ...mapMutations(["ADD_GOODS"]),
         //1.初始化操作
         async initData(){
             //1.获取左边的数据

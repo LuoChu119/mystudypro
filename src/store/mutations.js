@@ -1,5 +1,9 @@
-import {ADD_GOODS, INIT_SHOP_CART, REDCE_CART} from './mutations-type.js'
-import {setStore, getStore} from './../config/global'
+import {ADD_GOODS, INIT_SHOP_CART, REDCE_CART,
+     SELECTED_SIGLE_GOODS, USER_INFO, INIT_USER_INFO
+     ,RESET_USER_INFO, CLEAR_CART
+    } from './mutations-type.js'
+import {setStore, getStore, removeStore} from './../config/global'
+import Vue from 'vue'
 export default {
     
     //1.往购物车里添加数据
@@ -32,7 +36,7 @@ export default {
             state.shopCart = JSON.parse(initCart)
         }
     },
-    //商品移除购物车
+    //3.商品移除购物车
     [REDCE_CART](state, {goodsId}){
         let shopCart = state.shopCart
         let goods = shopCart[goodsId]
@@ -52,6 +56,47 @@ export default {
             setStore('shopCart', state.shopCart)
 
         }
+    },
+    //4.单个商品选中或者取消选中
+    [SELECTED_SIGLE_GOODS](state, goodsId){
+        let shopCart = state.shopCart
+        let goods = shopCart[goodsId]
+        if(goods){
+            if(goods.checked){
+                goods.checked = !goods.checked
+            }else{
+                Vue.set(goods, 'checked', true)
+            }
+            //同步数据
+            state.shopCart = {...shopCart}
+            //存入本地
+            setStore('shopCart', state.shopCart)
+        }
+    },
+    //5.保存用户信息到本地
+    [USER_INFO](state, {userInfo}){
+        state.userInfo = userInfo;
+        setStore('userInfo', state.userInfo)
+    },
+    //清空购物车
+    [CLEAR_CART](state){
+        state.shopCart = null
+        state.shopCart = {...state.shopCart}
+        setStore('shopCart', state.shopCart)
+    },
+    //获取用户信息，拿到本地用户信息
+    [INIT_USER_INFO](state){
+        //拿本地用户信息
+        let userInfo = getStore('userInfo')
+        //判断
+        if(userInfo){
+            state.userInfo = JSON.parse(userInfo)
+        }
+    },
+    //退出登录
+    [RESET_USER_INFO](state){
+        state.userInfo = {}
+        removeStore('userInfo')
     }
 
 }

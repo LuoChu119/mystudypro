@@ -24,10 +24,19 @@
 import Bscroll from 'better-scroll'
 //引入消息订阅模块
 import PubSub from 'pubsub-js'
+import {mapMutations, mapState} from 'vuex'
+//引入轻提示
+import {Toast} from 'vant'
+//购物车同步到服务器请求
+import {addGoodsToCart} from './../../../service/api/index'
+
 export default {
     name:'ProductItem',
     props:{
         products: Array
+    },
+    computed:{
+        ...mapState(['userInfo'])
     },
     data(){
         return{
@@ -41,8 +50,25 @@ export default {
             })
     },
     methods:{
-        addToCart(goods){
-            PubSub.publish('categoryAddToCart', goods)
+        ...mapMutations(['ADD_GOODS']),
+        async addToCart(goods){
+            if(this.userInfo.token){//已经登录
+                let result = await addGoodsToCart(this.userInfo.token, goods.id, goods.name, goods.price, goods.small_image)
+                console.log(result);
+                if(result.success_code === 200){
+                    this.ADD_GOODS({
+                    goodsId: goods.id,
+                    goodsName: goods.name,
+                    smallImage: goods.small_image,
+                    goodsPrice: goods.price
+                })
+                //轻提示用户添加购物车成功
+                Toast('添加购物车成功');
+                }
+            }else{
+                this.$router.push('/login')
+            }
+            
         },
     }
 }

@@ -32,7 +32,9 @@
     </div>
 </template>
 <script>
-import {mapState, mapMutations} from 'vuex'
+import {mapState, mapMutations, mapActions} from 'vuex'
+import { getGoodsCart } from '../../service/api';
+import {setStore} from './../../config/global'
 export default {
     name:'Dashboard',
     data() {
@@ -64,7 +66,7 @@ export default {
     },
     //从vuex中拿到的所有的数据，状态都应该放到computed里面
     computed:{
-        ...mapState(['shopCart']),
+        ...mapState(['shopCart', ['userInfo']]),
         goodsNum(){
             if(this.shopCart){
                 //总的购物车商品数量
@@ -80,12 +82,40 @@ export default {
         }
     },
     mounted(){
+        //自动登录
+        this.reqUserInfo()
         //到这个钩子里面代表页面初始化完毕
         //1.获取购物车里面的数据
-        this.INIT_SHOP_CART();
+        this.initShopCart();
     },
     methods:{
-        ...mapMutations(['INIT_SHOP_CART'])
+        ...mapMutations(['INIT_SHOP_CART']),
+        ...mapActions(['reqUserInfo']),
+        async initShopCart(){
+            if(this.userInfo.token){//已经登录
+                //获取当前购物车的商品（服务器端）
+                let result = await getGoodsCart(this.userInfo.token)
+                console.log(result);
+                if(result.success_code === 200){
+                    let cartArr = result.data
+                    let shopCart ={}
+                    //遍历
+                    cartArr.forEach((value) => {
+                        shopCart[value.goods_id] = {
+                            "num": value.num,
+                            "id": value.goods_id,
+                            "name": value.goods_name,
+                            "small_image": value.small_image,
+                            "price": value.goods_price,
+                            "checked": true
+                        }
+                    })
+                    //本地数据同步
+                    setStore('shopCart', shopCart)
+                    this.INIT_SHOP_CART()
+                }
+            }
+        }
     }
 }
 </script>

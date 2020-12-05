@@ -1,17 +1,17 @@
 <template>
-    <div id="cart">
+    <div id="cart" v-if="userInfo.token">
         <!-- 头部区域 -->
         <header class="titleWrapper">
             <h4><strong>购物车</strong></h4>
-            <button class="clearCart">清空购物车</button>
+            <button @click="clearCart" class="clearCart">清空购物车</button>
         </header>
         <!-- 中间内容 -->
         <div class="contentWrapper">
             <main class="contentWrapperList">
                 <section class=" main_part" v-for="(goods) in shopCart" :key="goods.id">
                     <div class="select">
-                        <van-icon @click="show" v-if="selectShow" name="circle" class="no_select"/>
-                        <van-icon @click="show" v-else name="passed" class="y_select"/>
+                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-if="selectShow" name="circle" class="no_select"/>
+                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-else name="passed" class="y_select"/>
                     </div>
                     <div class="proImg">
                         <img :src="goods.small_image" alt="">
@@ -25,7 +25,7 @@
                     <div class="pro_add">
                         <span @click="removeOutCart(goods.id, goods.num)" class="minus"><strong>-</strong></span>
                         <span class="num">{{goods.num}}</span>
-                        <span class="add"><strong>+</strong></span>
+                        <span @click="addToCart(goods.id, goods.name, goods.small_image, goods.price)" class="add"><strong>+</strong></span>
                     </div>
                 </section>
             </main>
@@ -33,8 +33,8 @@
                 <div class="tabBarLeft">
                     <a href="javascript:" class="cartCheckBox"></a>
                     <div class="select">
-                        <van-icon @click="show" v-if="selectShow" name="circle" class="no_select"/>
-                        <van-icon @click="show" v-else name="passed" class="y_select"/>
+                        <van-icon v-if="selectShow" name="circle" class="no_select"/>
+                        <van-icon  v-else name="passed" class="y_select"/>
                     </div>
                     <span>全选</span>
                     <div class="selectAll">
@@ -42,42 +42,122 @@
                     </div>
                 </div>
                 <div class="tabBarRight">
-                    <a href="#" class="pay">去结算(3)</a>
+                    <router-link tag="a" class="pay" :to="{path: '/comfirmOrder'}">去结算(3)</router-link>
                 </div>
-
+                
             </div>
         </div>
     </div>
+    <SelectLogin v-else />
 </template>
 <script>
 import {mapState, mapMutations} from 'vuex'
+//引入登录组件
+import SelectLogin from './../login/SelectLogin.vue'
+//引入确认组件
+import { Dialog, Toast } from 'vant';
+//引入人民币过滤器
+import '@/config/filters.js'
+import { changeCartNum, claerAllCart} from '../../service/api';
 export default {
     name:'Cart',
     computed:{
-        ...mapState(['shopCart'])
+        ...mapState(['shopCart', 'userInfo'])
     },
     data(){
         return{
+            radio: '1',
             selectShow: false
+
         }
     },
     methods:{
-        ...mapMutations(['REDCE_CART']),
-        //移出购物车
-        removeOutCart(goodsId, goodsNum){
+        ...mapMutations(['REDCE_CART', 'ADD_GOODS', 'SELECTED_SIGLE_GOODS', 'CLEAR_CART']),
+        //1.移出购物车
+        async removeOutCart(goodsId, goodsNum){
             if(goodsNum > 1){
+                    let result = await changeCartNum(this.userInfo.token, goodsId, 'reduce')
+                    console.log(result);
+                    if(result.success_code === 200){//修改成功
+                    this.REDCE_CART({goodsId})
+                    }else{
+                        Toast({
+                            message: '出了点小问题哟~',
+                            duration: 500
+                        })
+                    }
+            }else if(goodsNum === 1){
+                // 挽留
+                Dialog.confirm({
+                title: '温馨提示',
+                message: '确定删除该商品吗？',
+                }).then(async () => {
+                    // on confirm
+                    let result = await changeCartNum(this.userInfo.token, goodsId, 'reduce')
+                    console.log(result);
+                    if(result.success_code === 200){//修改成功
+                    this.REDCE_CART({goodsId})
+                    }else{
+                    Toast({
+                        message: '出了点小问题哟~',
+                        duration: 500
+                    })
+                }
 
+                }).catch(() => {
+                    // on cancel
+                });
             }
+        },
+        //添加商品数量
+        async addToCart(goodsId, goodsName, smallImage, goodsPrice){
+                let result = await changeCartNum(this.userInfo.token, goodsId, 'reduce')
+                    console.log(result);
+                    if(result.success_code === 200){//修改成功
+                        this.ADD_GOODS({goodsId, goodsName, smallImage, goodsPrice})
+                    }else{
+                        Toast({
+                            message: '出了点小问题哟~',
+                            duration: 500
+                        })
+                    }
+        },
+        //单个商品选中或者取消选中
+        singerGoodsSelected(goods, goodsId){
+            this.SELECTED_SIGLE_GOODS(goodsId)
+            console.log(123456);
+            console.log(goods.checked);
+            return this.selectShow = goods.checked
 
         },
-        show(){
-            if(this.selectShow){
-                this.selectShow = false
-            }
-            else{
-                this.selectShow = true
-            }
+        //清空购物车
+        clearCart(){
+            // 挽留
+                Dialog.confirm({
+                title: '温馨提示',
+                message: '确定删除该商品吗？',
+                })
+                .then(async () => {
+                    // on confirm
+                    let result = await claerAllCart(this.userInfo.token)
+                    console.log(result);
+                    if(result.success_code === 200){//清空成功
+                        this.CLEAR_CART()
+                    }else{
+                        Toast({
+                            message: '出了点小问题哟~',
+                            duration: 500
+                        })
+                    }
+                    
+                })
+                .catch(() => {
+                    // on cancel
+                });
         }
+    },
+    components: {
+        SelectLogin
     }
 }
 </script>
