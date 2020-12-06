@@ -39,7 +39,7 @@ export default {
         }
     },
     //3.商品移除购物车
-    [REDCE_CART](state, {goodsId}){
+    [REDCE_CART](state, goodsId){
         let shopCart = state.shopCart
         let goods = shopCart[goodsId]
         if(goods){
@@ -62,36 +62,28 @@ export default {
     [SELECTED_SIGLE_GOODS](state, goodsId){
         let shopCart = state.shopCart
         let goods = shopCart[goodsId]
-        if(goods){
-            Object.values(shopCart).forEach(el => {
-                if (el.id === goodsId) {
-                    el.checked = !el.checked
-                }
-            })
-            // if(goods.checked){
-            //     goods.checked = !goods.checked
-            // }else{
-            //     Vue.set(goods, 'checked', true)
-            // }
-            //同步数据
-            state.shopCart = {...shopCart}
-            //存入本地
-            setStore('shopCart', state.shopCart)
+        if(goods.checked){
+            goods.checked = !goods.checked
+        }else{
+            Vue.set(goods, 'checked', true)
         }
+        //同步数据
+        state.shopCart = {...shopCart}
+        //存入本地
+        setStore('shopCart', state.shopCart)
+        
     },
     // 全选和非全选
-    [SELECTED_All_GOODS](state, isSelectAll) {
+    [SELECTED_All_GOODS](state, isSelected) {
         let shopCart = state.shopCart
-        console.log(isSelectAll)
-        if (isSelectAll) {
-            Object.values(shopCart).forEach(el => {
-                el.checked = true
-            })
-        } else {
-            Object.values(shopCart).forEach(el => {
-                el.checked = false
-            })
-        }
+        Object.values(shopCart).forEach((goods, index) => {
+            if(goods.checked){
+                goods.checked = !goods.checked
+            }else{
+                Vue.set(goods, 'checked', true)
+            }
+        })
+        
         state.shopCart = {...shopCart}
             //存入本地
         setStore('shopCart', state.shopCart)

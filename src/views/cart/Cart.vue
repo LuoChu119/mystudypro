@@ -32,7 +32,7 @@
             <div class="tabBar">
                 <div class="tabBarLeft">
                     <a href="javascript:" class="cartCheckBox"></a>
-                    <div class="select" @click="selectAll">
+                    <div class="select" @click="selectAll()">
                         <van-icon v-if="isSelectAll" name="passed" class="y_select"/>
                         <van-icon v-else name="circle" class="no_select"/>
                     </div>
@@ -62,19 +62,34 @@ import { changeCartNum, claerAllCart} from '../../service/api';
 export default {
     name:'Cart',
     computed:{
-        ...mapState(['shopCart', 'userInfo'])
+        ...mapState(['shopCart', 'userInfo']),
+        //商品是否全选
+        // isSelectAll(){
+        //     let tag = true
+        //     Object.values(this.shopCart).forEach((goods, index) => {
+        //         if(!goods.checked){
+        //             tag = false
+        //         }
+        //         return this.isSelectAll =  tag
+        //     })
+        // }
+        
     },
     data(){
         return{
             radio: '1',
-            isSelectAll: false
+            isSelectAll: true
         }
     },
     methods:{
         ...mapMutations(['REDCE_CART', 'ADD_GOODS', 'SELECTED_SIGLE_GOODS', 'SELECTED_All_GOODS', 'CLEAR_CART']),
-        selectAll() {
-            this.isSelectAll = !this.isSelectAll
-            this.SELECTED_All_GOODS(this.isSelectAll)
+        selectAll(isSlected) {
+            this.SELECTED_All_GOODS(isSlected)
+            Object.values(this.shopCart).forEach((goods, index) => {
+                if(!goods.checked){
+                    return this.isSelectAll = false
+                }
+            })
         },
         //1.移出购物车
         async removeOutCart(goodsId, goodsNum){
@@ -82,7 +97,7 @@ export default {
                     let result = await changeCartNum(this.userInfo.token, goodsId, 'reduce')
                     console.log(result);
                     if(result.success_code === 200){//修改成功
-                    this.REDCE_CART({goodsId})
+                    this.REDCE_CART(goodsId)
                     }else{
                         Toast({
                             message: '出了点小问题哟~',
@@ -111,10 +126,11 @@ export default {
                     // on cancel
                 });
             }
+
         },
         //添加商品数量
         async addToCart(goodsId, goodsName, smallImage, goodsPrice){
-                let result = await changeCartNum(this.userInfo.token, goodsId, 'reduce')
+                let result = await changeCartNum(this.userInfo.token, goodsId, 'add')
                     console.log(result);
                     if(result.success_code === 200){//修改成功
                         this.ADD_GOODS({goodsId, goodsName, smallImage, goodsPrice})
@@ -130,8 +146,12 @@ export default {
             this.SELECTED_SIGLE_GOODS(goodsId)
             console.log(123456);
             console.log(goods.checked);
-            return this.selectShow = goods.checked
-
+            if(!goods.checked){
+                this.isSelectAll = false
+            }else{
+                this.isSelectAll = true
+        }
+            
         },
         //清空购物车
         clearCart(){
