@@ -61,3 +61,15 @@ Vue.use(GridItem);
 import { Form } from 'vant';
 
 Vue.use(Form);
+//引入弹出层组件
+import { Popup } from 'vant';
+
+Vue.use(Popup);
+//引入日期组件
+import { DatetimePicker } from 'vant';
+
+Vue.use(DatetimePicker);
+//引入商品卡片组件
+import { Card } from 'vant';
+
+Vue.use(Card);

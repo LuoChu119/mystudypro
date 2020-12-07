@@ -62,10 +62,12 @@ export default {
     [SELECTED_SIGLE_GOODS](state, goodsId){
         let shopCart = state.shopCart
         let goods = shopCart[goodsId]
-        if(goods.checked){
-            goods.checked = !goods.checked
-        }else{
-            Vue.set(goods, 'checked', true)
+        if(goods){
+            if(goods.checked){
+                goods.checked = !goods.checked
+            }else{
+                Vue.set(goods, 'checked', true)
+            }
         }
         //同步数据
         state.shopCart = {...shopCart}
@@ -74,13 +76,13 @@ export default {
         
     },
     // 全选和非全选
-    [SELECTED_All_GOODS](state, isSelected) {
+    [SELECTED_All_GOODS](state, {isSelected}) {
         let shopCart = state.shopCart
         Object.values(shopCart).forEach((goods, index) => {
             if(goods.checked){
-                goods.checked = !goods.checked
+                goods.checked = !isSelected
             }else{
-                Vue.set(goods, 'checked', true)
+                Vue.set(goods, 'checked', !isSelected)
             }
         })
         

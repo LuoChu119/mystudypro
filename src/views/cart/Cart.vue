@@ -10,8 +10,8 @@
             <main class="contentWrapperList">
                 <section class=" main_part" v-for="(goods) in shopCart" :key="goods.id">
                     <div class="select">
-                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-if="!goods.checked" name="circle" class="no_select"/>
-                        <van-icon @click="singerGoodsSelected(goods, goods.id)" v-else name="passed" class="y_select"/>
+                        <van-icon @click="singerGoodsSelected(goods.id)" v-if="!goods.checked" name="circle" class="no_select"/>
+                        <van-icon @click="singerGoodsSelected(goods.id)" v-else name="passed" class="y_select"/>
                     </div>
                     <div class="proImg">
                         <img :src="goods.small_image" alt="">
@@ -32,17 +32,17 @@
             <div class="tabBar">
                 <div class="tabBarLeft">
                     <a href="javascript:" class="cartCheckBox"></a>
-                    <div class="select" @click="selectAll()">
-                        <van-icon v-if="isSelectAll" name="passed" class="y_select"/>
-                        <van-icon v-else name="circle" class="no_select"/>
+                    <div class="select" >
+                        <van-icon @click="selectedAll(isSelectAll)" v-if="!isSelectAll" name="passed" class="y_select"/>
+                        <van-icon @click="selectedAll(isSelectAll)" v-else name="circle" class="no_select"/>
                     </div>
                     <span>全选</span>
                     <div class="selectAll">
-                        合计：<span class="totalPrice">199.00</span>
+                        合计：<span class="totalPrice">{{totalPrice | moneyFormat}}</span>
                     </div>
                 </div>
                 <div class="tabBarRight">
-                    <router-link tag="a" class="pay" :to="{path: '/comfirmOrder'}">去结算(3)</router-link>
+                    <button class="pay" @click="toPay">去结算({{goodsCount}})</button>
                 </div>
                 
             </div>
@@ -58,38 +58,54 @@ import SelectLogin from './../login/SelectLogin.vue'
 import { Dialog, Toast } from 'vant';
 //引入人民币过滤器
 import '@/config/filters.js'
-import { changeCartNum, claerAllCart} from '../../service/api';
+import { changeCartNum, claerAllCart, singleGoodsSelect, allGoodsSelect} from '../../service/api';
 export default {
     name:'Cart',
     computed:{
         ...mapState(['shopCart', 'userInfo']),
-        //商品是否全选
-        // isSelectAll(){
-        //     let tag = true
-        //     Object.values(this.shopCart).forEach((goods, index) => {
-        //         if(!goods.checked){
-        //             tag = false
-        //         }
-        //         return this.isSelectAll =  tag
-        //     })
-        // }
+        // 商品是否全选
+        isSelectAll(){
+            let tag = true
+            Object.values(this.shopCart).forEach((goods, index) => {
+                if(!goods.checked){
+                    tag = false
+                }
+                return console.log(tag);
+            })
+        },
+        //计算商品的总价
+        totalPrice(){
+            let totalPrice = 0
+            Object.values(this.shopCart).forEach((goods, index) => {
+                if(goods. checked){
+                    totalPrice += goods.price * goods.num
+                }
+                
+            })
+            return totalPrice
+        },
+        //商品件数
+        goodsCount(){
+            let num = 0
+            num = Object.keys(this.shopCart).length
+            Object.values(this.shopCart).forEach((goods, index) => {
+                if(!goods.checked){
+                    num -=1
+                }   
+            })
+            return  num         
+        }
         
     },
     data(){
         return{
             radio: '1',
-            isSelectAll: true
         }
     },
     methods:{
         ...mapMutations(['REDCE_CART', 'ADD_GOODS', 'SELECTED_SIGLE_GOODS', 'SELECTED_All_GOODS', 'CLEAR_CART']),
-        selectAll(isSlected) {
+        selectedAll(isSlected) {
             this.SELECTED_All_GOODS(isSlected)
-            Object.values(this.shopCart).forEach((goods, index) => {
-                if(!goods.checked){
-                    return this.isSelectAll = false
-                }
-            })
         },
         //1.移出购物车
         async removeOutCart(goodsId, goodsNum){
@@ -142,15 +158,15 @@ export default {
                     }
         },
         //单个商品选中或者取消选中
-        singerGoodsSelected(goods, goodsId){
+        async singerGoodsSelected(goodsId){
+            let result = await singleGoodsSelect(this.userInfo.token, goodsId)
+            console.log(result);
+            if(result.success_code === 200){
             this.SELECTED_SIGLE_GOODS(goodsId)
-            console.log(123456);
-            console.log(goods.checked);
-            if(!goods.checked){
-                this.isSelectAll = false
-            }else{
-                this.isSelectAll = true
-        }
+            }
+            // console.log(123456);
+            // console.log(goods.checked);
+        
             
         },
         //清空购物车
@@ -177,6 +193,14 @@ export default {
                 .catch(() => {
                     // on cancel
                 });
+        },
+        toPay(){
+            if(this.goodsCount){
+                this.$router.push('/comfirmOrder')
+            }else{
+                Toast('请先选择商品再进行结算噢~')
+                
+            }
         }
     },
     components: {
@@ -223,8 +247,10 @@ export default {
         
     }
     .contentWrapper .contentWrapperList .select .y_select{
-        color: red;
-
+        color: green;
+    }
+    .contentWrapper .tabBar .select .y_select{
+        color: green;
     }
     .contentWrapper .contentWrapperList  .proImg{
         width: 35%;
@@ -289,6 +315,9 @@ export default {
         padding-top: 0.15rem;
         float: right;
         font-size: 0.87rem;
+    }
+    .contentWrapper .tabBarLeft .selectAll>span{
+        color: red;
     }
     .contentWrapper .tabBarRight{
         padding: 0.6rem 0;

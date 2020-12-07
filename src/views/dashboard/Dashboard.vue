@@ -95,6 +95,7 @@ export default {
             if(this.userInfo.token){//已经登录
                 //获取当前购物车的商品（服务器端）
                 let result = await getGoodsCart(this.userInfo.token)
+                console.log(5555555555555555);
                 console.log(result);
                 if(result.success_code === 200){
                     let cartArr = result.data
@@ -107,7 +108,7 @@ export default {
                             "name": value.goods_name,
                             "small_image": value.small_image,
                             "price": value.goods_price,
-                            "checked": true
+                            "checked": value.checked
                         }
                     })
                     //本地数据同步

@@ -37,23 +37,23 @@ export default {
     mounted(){
         this.initUserAddress()
         //订阅成功添加地址的消息
-        PubSub.subscribe('addAddressSuccess', (msg) => {
-            if('addAddressSuccess' === msg){
-                this.initUserAddress()
-            }
-        })
-        //订阅改变地址的信息
-         PubSub.subscribe('addAddresschange', (msg) => {
-            if('addAddresschange' === msg){
+        // PubSub.subscribe('addAddressSuccess', (msg) => {
+        //     if('addAddressSuccess' === msg){
+        //         this.initUserAddress()
+        //     }
+        // })
+        //订阅地址的信息
+         PubSub.subscribe('backToMyaddress', (msg) => {
+            if('backToMyaddress' === msg){
                 this.initUserAddress()
             }
         })
         //订阅删除地址的信息
-        PubSub.subscribe('addAddressdel', (msg) => {
-            if('addAddressdel' === msg){
-                this.selectAddressDel(this.index)
-            }
-        })
+        // PubSub.subscribe('addAddressdel', (msg) => {
+        //     if('addAddressdel' === msg){
+        //         this.selectAddressDel(this.index)
+        //     }
+        // })
 
     },
     methods:{
@@ -78,10 +78,16 @@ export default {
                 }
             )
         },
-        //获取当前的用户地址用于删除
-        async selectAddressDel(index){
-            this.list.splice(index,1)
-            
+        //点击返回选中的地址到我的订单
+        selectAddressDel(item, index){
+            // alert('来啦')
+            // console.log(item, index);
+            if(item){
+                //发布地址数据
+                PubSub.publish('userAddress', item)
+                //返回到我的订单路由
+                this.$router.back()
+            }
         },
         //获取当前用户的地址
         async initUserAddress(){
@@ -117,7 +123,7 @@ export default {
     },  
     beforeDestroy(){
         // 取消订阅
-        PubSub.unsubscribe('addAddressSuccess')
+        PubSub.unsubscribe('backToMyaddress')
     }
 }
 </script>

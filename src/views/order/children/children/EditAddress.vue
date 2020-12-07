@@ -8,7 +8,6 @@
         show-delete
         show-set-default
         show-search-result
-        :search-result="searchResult"
         :area-columns-placeholder="['请选择', '请选择', '请选择']"
         @save="onSave"
         @delete="onDelete"
@@ -48,26 +47,26 @@ export default {
         onClickLeft(){
             this.$router.back()
         },
-        async onSave(content, index){
-            console.log('--------------' + index);
+        async onSave(content){
             console.log(1111);
             console.log(content);
             if(this.userInfo.token){
-                let result = await changeUserAddress(this.userInfo.token, content.name, content.tel, content.province + content.city + content.county, 
+                //发起修改请求
+                let result = await changeUserAddress(this.addressInfo.id, this.userInfo.token, content.name, content.tel, content.province + content.city + content.county, 
                 content.addressDetail, content.postalCode, content.isDefault, content.province, content.city, content.county, content.areaCode)
                 console.log(result);
                 if(result.success_code === 200){
                     Toast({
-                        message: '添加地址成功~',
+                        message: '编辑地址成功~',
                         duration: 400
                     })
                     //返回上一层
                     this.$router.back()
                     //发布消息
-                    PubSub.publish('addAddresschange')
+                    PubSub.publish('backToMyaddress')
                 }else{
                     Toast({
-                        message: '添加地址失败~',
+                        message: '编辑地址失败~',
                         duration: 400
                     })
                 }
@@ -77,7 +76,7 @@ export default {
         async onDelete(){
             console.log('是不是');
             if(this.userInfo.token){
-                let result = await delUserAddress(this.userInfo.token)
+                let result = await delUserAddress(this.addressInfo.id)
                 console.log(99999999);
                 console.log(result);
                 if(result.success_code === 200){
@@ -88,7 +87,7 @@ export default {
                     //返回上一层
                     this.$router.back()
                     //发布消息
-                    PubSub.publish('addAddressdel')
+                    PubSub.publish('backToMyaddress')
                 }else{
                     Toast({
                         message: '删除地址失败~',

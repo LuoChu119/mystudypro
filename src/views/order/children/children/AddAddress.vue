@@ -55,7 +55,7 @@ export default {
                     //返回上一层
                     this.$router.back()
                     //发布消息
-                    PubSub.publish('addAddressSuccess')
+                    PubSub.publish('backToMyaddress')
                 }else{
                     Toast({
                         message: '添加地址失败~',

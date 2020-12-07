@@ -39,12 +39,40 @@ export const addUserAddress = (user_id, address_name, address_phone, address_are
     address_post_code, address_tag, province, city, county, areaCode) => ajax(BASE_URL + '/api/address/add', {user_id, address_name, 
     address_phone, address_area, address_area_detail,address_post_code, address_tag, province, city, county, areaCode}, 'POST')
 //4.3编辑用户地址
-export const changeUserAddress = (user_id, address_name, address_phone, address_area, address_area_detail,
-    address_post_code, address_tag, province, city, county, areaCode) => ajax(BASE_URL + '/api/address/edit', {user_id, address_name, 
+export const changeUserAddress = (address_id, user_id, address_name, address_phone, address_area, address_area_detail,
+    address_post_code, address_tag, province, city, county, areaCode) => ajax(BASE_URL + '/api/address/edit', {address_id, user_id, address_name, 
     address_phone, address_area, address_area_detail,address_post_code, address_tag, province, city, county, areaCode}, 'POST')
 //4.4删除用户地址
 export const delUserAddress = (address_id) => ajax(BASE_URL + '/api/address/del/' + address_id)
 //4.5获取单条地址
 export const getCurrentUserAddress = (user_id, address_id) => ajax(BASE_URL + '/api/address/one', {user_id, address_id}, 'POST')
 
+
+//5.1单个商品的选中和取消选中接口
+export const singleGoodsSelect = (user_id, goods_id) => ajax(BASE_URL + '/api/cart/singer_select', {user_id, goods_id}, 'POST')
+//5.2所有商品全选和非全选接口
+export const allGoodsSelect = (user_id, flag) => ajax(BASE_URL + '/api/cart/all_select', {user_id, flag}, 'POST')
+//5.3查询所有已经被选中的商品
+export const getAllSelectGoods = (user_id) => ajax(BASE_URL + '/api/cart/selected/' + user_id)
+//5.4删除已经生成订单的商品
+export const delAllSelectGoods = (user_id) => ajax(BASE_URL + '/api/cart/del_checked/' + user_id)
+
+
+
+//6.订单接口
+//6.1提交订单
+export const postOrder = (user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price) => ajax(BASE_URL + 
+    '/api/order/post' + {user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price}, 'POST')
+
+//6.2订单创建成功
+export const createOrderSuccess = (user_id, order_id) => ajax(BASE_URL + '/api/order/change_status' + {user_id, order_id}, 'POST')
+
+//6.3查询订单
+export const getOrder = (user_id, status) => ajax(BASE_URL + '/api/order/get' + {user_id, status}, 'POST')
+
+//7.微信支付接口部署
+const PAY_URL = 'http://47.98.157.152/WXPayProject/pay'
+//7.1获取支付的URL
+export const getWXCode = (outTradeNo, totalFee) => ajax(PAY_URL + '/createNative.do', {outTradeNo, totalFee})
+export const queryPayStatus = (out_Trade_No) => ajax(PAY_URL + '/queryPayStatus.do', {out_Trade_No})
 

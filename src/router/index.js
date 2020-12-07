@@ -13,6 +13,7 @@ const Mine = () => import('./../views/mine/Mine');
 const UserCenter = () => import('./../views/mine/children/UserCenter');
 //三级路由
 const Order = () => import('./../views/order/Order')
+const OrderDetail = () => import('./../views/order/children/OrderDetail')
 const MyAddress = () => import('./../views/order/children/MyAddress')
 const AddAddress = () => import('./../views/order/children/children/AddAddress')
 const EditAddress = () => import('./../views/order/children/children/EditAddress')
@@ -58,7 +59,9 @@ export default new Router({
             {path: 'addAddress', name: 'addAddress', component: AddAddress},
             {path: 'editAddress', name: 'editAddress', component: EditAddress}
           ]
-        }
+        },
+        {path:'orderDetail', name: 'orderDetail', component:OrderDetail}
+
       ]
     },
     {path: '/login', name: 'login', component: Login}
