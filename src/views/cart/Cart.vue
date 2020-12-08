@@ -216,6 +216,8 @@ export default {
     }
     .contentWrapper{
         margin-top: 1.8rem;
+        height: 30rem;
+        overflow: auto;
     }
     .titleWrapper{
         position: relative;

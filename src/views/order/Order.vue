@@ -44,6 +44,11 @@
             @confirm="onDateConfirm"
             />
         </van-popup>
+        <!-- 支付二维码门板展示 -->
+        <van-popup v-model="ispay" position="center" :style="{ height: '30%' }">
+            <qriously :value="qrcode" :size="200" />
+        </van-popup>
+
         <transition name="router-slider" mode="out-in">
             <router-view/>
         </transition>
@@ -56,7 +61,8 @@ import PubSub from 'pubsub-js'
 //
 import {mapState, mapMutations, mapActions} from 'vuex'
 //引入数据请求接口
-import {postOrder, createOrderSuccess, getWXCode, queryPayStatus, getAllSelectGoods} from './../../service/api/index'
+import {postOrder, createOrderSuccess, getWXCode, queryPayStatus, getAllSelectGoods
+, delAllSelectGoods} from './../../service/api/index'
 //引入时间格式化组件
 import Moment from 'moment'
 export default {
@@ -123,7 +129,10 @@ export default {
             arriveDate: '请选择送达时间',
             //备注
             notice: null,
-            //配送费
+            //支付门板显示
+            ispay: false,
+            //生成微信二维码的地址
+            qrcode: null 
    
         }
     },
@@ -150,7 +159,7 @@ export default {
             this.$router.push('/comfirmOrder/MyAddress')
         },
         //订单提交
-        onSubmit(){
+        async onSubmit(){
             //数据验证
             if(!this.address_id){
                 Toast(
@@ -180,9 +189,67 @@ export default {
                 return
             }
             //处理订单相关
-            if(this.userInfo.token){
+            if(this.userInfo.token){    
+                //查询车订单
+                let goodsResult = await getAllSelectGoods(this.userInfo.token)
+                console.log(goodsResult);
+                //创建订单
+                if(goodsResult.success_code === 200){
+                    let orderResult = await postOrder(this.userInfo.token, this.address_id, this.arrive_time, goodsResult.data, this.notice, 
+                    this.totalPrice, this.disPrice)
+                    console.log(orderResult);
+                    //删除购物车中已经生成订单的商品
+                    if(orderResult.success_code === 200){
+                        let delResult = await delAllSelectGoods(this.userInfo.token)
+                        console.log(delResult);
+                        //发起微信支付
+                        if(delResult.success_code === 200){
+                            //请求微信支付接口,现在是默认一分钱
+                            let urlResult = await getWXCode(orderResult.data.order_id, 1)
+                            console.log(urlResult);
+                            //判断求的数据是否有微信二维码的url地址
+                            if(urlResult.code_url){
+                                this.ispay = true
+                                this.qrcode = urlResult.code_url
+                                //再次验证用户是否扫码支付成功
+                                let payResult = await queryPayStatus(orderResult.data.order_id)
+                                console.log(payResult);
+                                if(!payResult.success){
+                                    Toast({
+                                        message: payResult.message, duration: 1000
+                                    })
+                                    this.ispay = false
+                                    //通知自己服务器订单支付成功
+                                    let statusResult = await OrderPaySuccess(this.userInfo.token, orderResult.data.order_id)
+                                    console.log(statusResult);
+                                    if(statusResult.success_code === 200){
+                                        //跳转到我的界面
+                                        this.$router.replace('/dashboard/mine')
+                                        window.sessionStorage.setItem('tabBarActiveIndex', '3')
+                                    }
+                                }
 
-            }
+                            }
+
+
+                        }else{
+                            Toast(
+                                {message: '出了点小问题哦~', duration: 500}
+                            )
+                        }
+                    }else{
+                         Toast(
+                                {message: '订单同步出了点小问题哦~', duration: 500}
+                            )
+                    }
+                }
+                else{
+                    Toast({
+                        message: '获取订单商品失败',
+                        duration: 500
+                    })
+                }
+            }   
         },
         //展示日期组件
         showPopup(){

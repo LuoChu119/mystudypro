@@ -73,3 +73,8 @@ Vue.use(DatetimePicker);
 import { Card } from 'vant';
 
 Vue.use(Card);
+//选项卡
+import { Tab, Tabs } from 'vant';
+
+Vue.use(Tab);
+Vue.use(Tabs);

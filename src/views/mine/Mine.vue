@@ -17,7 +17,7 @@
             </van-cell>
         </van-cell-group>
          <van-cell-group style="margin-top: 0.6rem">
-            <van-cell icon="label" title="我的订单" value="查看所有订单" is-link/>
+            <van-cell @click="$router.push({path: '/dashboard/mine/mineOrder'})" icon="label" title="我的订单" value="查看所有订单" is-link/>
         </van-cell-group>
         <van-grid>
             <van-grid-item icon="pending-payment" text="待支付" />

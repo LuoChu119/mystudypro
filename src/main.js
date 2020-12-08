@@ -32,7 +32,9 @@ import './../src/style/conmon.less'
 import './plugins/vant'
 // 引入rem
 import './config/rem'
-
+//引入二维码生成插件
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously)
 
 new Vue({
   router,

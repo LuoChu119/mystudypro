@@ -11,6 +11,8 @@ const Cart = () => import('./../views/cart/Cart');
 //用户中心
 const Mine = () => import('./../views/mine/Mine');
 const UserCenter = () => import('./../views/mine/children/UserCenter');
+const MineOrder = () => import('./../views/mine/children/MineOrder');
+
 //三级路由
 const Order = () => import('./../views/order/Order')
 const OrderDetail = () => import('./../views/order/children/OrderDetail')
@@ -40,7 +42,8 @@ export default new Router({
           name:'mine', 
           component: Mine,
           children: [
-            {path: 'usercenter', component: UserCenter}//用户中心
+            {path: 'usercenter', component: UserCenter},//用户中心
+            {path: 'mineorder', component: MineOrder},//我的订单
           ]
         },
 

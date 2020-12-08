@@ -1,4 +1,5 @@
 import ajax from './ajax'
+// import {devServer} from './../../../tests/vue.config.js'
 //http://demo.itlike.com/web/xlmc/api/homeApi
 //http://demo.itlike.com/web/xlmc/api/homeApi/api/homeApi/categories
 //http://demo.itlike.com/web/xlmc/api/homeApi/api/homeApi/categoriesdetail/lk001
@@ -62,17 +63,18 @@ export const delAllSelectGoods = (user_id) => ajax(BASE_URL + '/api/cart/del_che
 //6.订单接口
 //6.1提交订单
 export const postOrder = (user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price) => ajax(BASE_URL + 
-    '/api/order/post' + {user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price}, 'POST')
+    '/api/order/post', {user_id, address_id, arrive_time, cart_shop, notice, shop_price, dis_price}, 'POST')
 
-//6.2订单创建成功
-export const createOrderSuccess = (user_id, order_id) => ajax(BASE_URL + '/api/order/change_status' + {user_id, order_id}, 'POST')
+//6.2订单支付成功
+export const OrderPaySuccess = (user_id, order_id) => ajax(BASE_URL + '/api/order/change_status', {user_id, order_id}, 'POST')
 
 //6.3查询订单
-export const getOrder = (user_id, status) => ajax(BASE_URL + '/api/order/get' + {user_id, status}, 'POST')
+export const getOrder = (user_id, status) => ajax(BASE_URL + '/api/order/get', {user_id, status}, 'POST')
 
 //7.微信支付接口部署
-const PAY_URL = 'http://47.98.157.152/WXPayProject/pay'
+// const PAY_URL = 'http://47.98.157.152/WXPayProject/pay'
+const PAY_URL = '/pay'
 //7.1获取支付的URL
 export const getWXCode = (outTradeNo, totalFee) => ajax(PAY_URL + '/createNative.do', {outTradeNo, totalFee})
-export const queryPayStatus = (out_Trade_No) => ajax(PAY_URL + '/queryPayStatus.do', {out_Trade_No})
+export const queryPayStatus = (out_Trade_no) => ajax(PAY_URL + '/queryPayStatus.do', {out_Trade_no})
 

@@ -137,6 +137,6 @@ export default {
     #home{
         width: 100%;
         height: 3000px;
-        background-color: skyblue;
+        // background-color: skyblue;
     }
 </style>
