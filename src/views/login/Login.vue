@@ -3,7 +3,7 @@
         <div class="login_inner">
             <div class="login_header">
                 <div class="login_logo">
-                    <img src="" alt="">
+                    <img src="http://demo.itlike.com/img/lk_logo_sm.6059c196.png" alt="">
                 </div>
                 <!-- 登录方式选择 -->
                 <div class="login_method">
@@ -243,8 +243,13 @@ export default {
         width: 80%;
         height: 10rem;
         margin: 0 auto;
-        background-color: orangered;
         margin-top: 6rem;
+        overflow: hidden;
+    }
+    .login_logo img{
+        width: 100%;
+        display: block;
+        margin-top: 1.2rem;
     }
     .login_header .login_method{
         margin: 0.8rem 0;
@@ -264,6 +269,9 @@ export default {
         margin: 0.5rem 0;
         position: relative;
     }
+    .iphone .iphone_in button{
+        background-color: #fff;
+    }
     .code_login .iphone_in{
         font-size: 0.85rem;
         margin: 0.5rem 0;
@@ -276,9 +284,13 @@ export default {
     }
     
     .iphone .iphone_in>input{
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
         width: 90%;
-        padding: 0.5rem 0;
+        padding: 0.8rem 0;
         margin: 0 5%;
+        padding-left: 0.5rem;
     }
     .code_login .iphone_in>input{
         width: 90%;
@@ -302,7 +314,7 @@ export default {
     }
     .iphone .iphone_in>button{
         position: absolute;
-        top: 0.5rem;
+        top: 0.9rem;
         right: 1.3rem;
         color: rgb(209, 194, 194);
     }
@@ -317,9 +329,15 @@ export default {
         position: relative;
     }
     .iphone .iphone_code_in>input{
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding-left: 0.5rem;
         width: 90%;
-        padding: 0.5rem 0;
+        padding: 0.8rem 0;
         margin: 0 5%;
+        padding-left: 0.5rem;
+
     }
     .code_login .iphone_code_in>input{
         width: 90%;
@@ -375,4 +393,5 @@ export default {
         border: 0.1rem solid  #2eba5a;
         border-radius: 0.6rem;
     }
+
 </style>

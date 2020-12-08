@@ -32,7 +32,6 @@ export default {
         font-size: 0.7rem;
         margin: 0.5rem 0;
         z-index: 200;
-        overflow: auto;
     }
     #myOrderItem .itemTop{
         flex: 1;

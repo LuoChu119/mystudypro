@@ -36,4 +36,8 @@ export default {
         white-space: nowrap;
         overflow-y: scroll;
     }
+    .content .categoryTitle{
+        /* background-color: #ffff; */
+        padding: 0.3rem 0;
+    }
 </style>

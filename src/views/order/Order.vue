@@ -214,20 +214,20 @@ export default {
                                 //再次验证用户是否扫码支付成功
                                 let payResult = await queryPayStatus(orderResult.data.order_id)
                                 console.log(payResult);
-                                if(!payResult.success){
-                                    Toast({
-                                        message: payResult.message, duration: 1000
-                                    })
-                                    this.ispay = false
-                                    //通知自己服务器订单支付成功
-                                    let statusResult = await OrderPaySuccess(this.userInfo.token, orderResult.data.order_id)
-                                    console.log(statusResult);
-                                    if(statusResult.success_code === 200){
-                                        //跳转到我的界面
-                                        this.$router.replace('/dashboard/mine')
-                                        window.sessionStorage.setItem('tabBarActiveIndex', '3')
-                                    }
-                                }
+                                // if(!payResult.success){
+                                //     Toast({
+                                //         message: payResult.message, duration: 1000
+                                //     })
+                                //     this.ispay = false
+                                //     //通知自己服务器订单支付成功
+                                //     let statusResult = await OrderPaySuccess(this.userInfo.token, orderResult.data.order_id)
+                                //     console.log(statusResult);
+                                //     if(statusResult.success_code === 200){
+                                //         //跳转到我的界面
+                                //         this.$router.replace('/dashboard/mine')
+                                //         window.sessionStorage.setItem('tabBarActiveIndex', '3')
+                                //     }
+                                // }
 
                             }
 

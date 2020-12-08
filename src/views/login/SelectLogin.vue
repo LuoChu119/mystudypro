@@ -1,7 +1,7 @@
 <template>
     <div class="select_login">
         <div class="bottom">
-            <img src="src\login\images\mine.jpg" alt="">
+            <img src="http://demo.itlike.com/img/lk_logo_sm.6059c196.png" alt="">
         </div>
         <h4>选择登录方式</h4>
         <router-link tag="button" to="/login">手机登录</router-link>
@@ -39,9 +39,13 @@ export default {
 
     }
     .bottom{
+        width: 80%;
         position: fixed;
         top: 130px;
         left: 50%;
         transform: translateX(-50%);
+    }
+    .bottom img{
+        width: 100%;
     }
 </style>

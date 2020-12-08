@@ -86,6 +86,6 @@ export default {
         right: 0;
         background-color: #f5f5f5;
         z-index: 200;
-        overflow: hidden;
+        overflow: auto;
     }
 </style>

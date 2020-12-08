@@ -82,6 +82,7 @@ export default {
         height: 6.5rem;
         position: relative;
         border-bottom: 0.1rem solid rgb(214, 202, 202);
+        background-color: #ffffff;
     }
     .proInformation .proimg{
         float: left;
