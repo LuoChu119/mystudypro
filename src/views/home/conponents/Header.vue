@@ -1,9 +1,11 @@
 <template>
     <div id="header">
         <div class="header-left">
-            <van-icon class="location" name="location-o"/>
-            <span class="address">四川成都撩课大厦</span>
-            <van-icon class="down" class-prefix="icon" name="xia1" />
+            <van-icon class="location" name="location" color="#bfbfbf" />
+            <span class="address">成都市</span>
+            <div class="img">
+                <img class="down" src="./../image/down.png" alt="">
+            </div>
         </div>
         <div class="header-right">
             <van-icon class="search" name="search" />
@@ -22,12 +24,14 @@ export default {
         width: 100%;
         height: 40px;
         line-height: 40px;
-        background-color: rgb(204, 192, 192);
+        overflow: auto;
     }
     .header-left{
+        padding-left: 0.5rem;
         height: 100%;
         float: left;
         font-size: 14px;
+        overflow: auto;
     }
     .location{
         font-size: 16px;
@@ -38,8 +42,15 @@ export default {
         line-height: 40px;
         vertical-align: 3px;
     }
+    .img{
+        width: 0.96rem;
+        float: right;
+        margin-left: 2rem;
+    }
     .down{
-        font-size: 16px;
+        width: 100%;
+        margin-top: 12px;
+        line-height: 40px;
         vertical-align: 2px;
 
     }
@@ -57,6 +68,6 @@ export default {
         height: 16px;
         line-height: 16px;
         margin-right: 10px;
-        background-color: rgb(204, 192, 192);
+        margin-left: 0.3rem;
     }
 </style>

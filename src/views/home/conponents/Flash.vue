@@ -34,6 +34,7 @@ export default {
         font-weight:300;
         padding: 0 10px;
         float: left;
+        font-size: 1.1875rem;
     }
     .titleWrapper .actionStateText{
         float: left;
@@ -41,13 +42,15 @@ export default {
         line-height: 26px;
         font-size: 14px;
         padding-right: 10px;
+        color: red;
     }
     .titleWrapper .actionStateTextEnd{
         height: 26px;
         line-height: 26px;
         font-size: 14px;
         padding: 0px 5px;
-        border: 1px solid rgb(184, 176, 176);
+        border: 1px solid #999;
+        color: #666;
         border-radius: 8px;
         float: left;
     }

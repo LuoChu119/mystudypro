@@ -38,6 +38,14 @@ export default {
     }
     .content .categoryTitle{
         /* background-color: #ffff; */
-        padding: 0.3rem 0;
+        padding: 0 .3125rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+        font-size: .75rem;
+        background: #f8f8f8;
+        color: #666;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 </style>

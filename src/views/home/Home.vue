@@ -139,6 +139,7 @@ export default {
         // height: 3000px;
         // background-color: #ffff;
         overflow: auto;
+        margin-bottom: 3rem;
         // background-color: skyblue;
     }
 </style>

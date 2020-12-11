@@ -115,7 +115,7 @@ export default {
     .listWrapper{
         display: flex;
         position: absolute;
-        top: 2.75rem;
+        top: 2.28rem;
         bottom: 3rem;
         width: 100%;
         overflow: hidden;

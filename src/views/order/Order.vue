@@ -206,13 +206,15 @@ export default {
                         if(delResult.success_code === 200){
                             //请求微信支付接口,现在是默认一分钱
                             let urlResult = await getWXCode(orderResult.data.order_id, 1)
+                            console.log(11111);
                             console.log(urlResult);
                             //判断求的数据是否有微信二维码的url地址
                             if(urlResult.code_url){
                                 this.ispay = true
                                 this.qrcode = urlResult.code_url
                                 //再次验证用户是否扫码支付成功
-                                let payResult = await queryPayStatus(orderResult.data.order_id)
+                                let payResult = await queryPayStatus(urlResult.out_trade_no)
+                                console.log(22222);
                                 console.log(payResult);
                                 // if(!payResult.success){
                                 //     Toast({

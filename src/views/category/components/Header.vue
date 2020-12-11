@@ -15,23 +15,24 @@ export default {
     #header{
         width: 100%;
         height: 40px;
-        line-height: 40px;
-        background-color: rgb(204, 192, 192);
+        line-height: 2.3rem;
+        border-bottom: 1px solid #e6e6e6;
     }
     .header-right{
-        font-size: 14px;
-        line-height: 40px;
+        margin-left: 0.7rem;
+        font-size: 0.85rem;
+        line-height: 2.3rem;
     }
     .search{
         margin-right: 3px;
-        font-size: 16px;
-        vertical-align: -3px;
+        font-size: 1rem;
+        vertical-align: -0.25rem;
     }
     .head_search{
+        margin-left: 0.5rem;
         height: 16px;
         line-height: 16px;
         margin-right: 10px;
-        background-color: rgb(204, 192, 192);
     }
 
 </style>
